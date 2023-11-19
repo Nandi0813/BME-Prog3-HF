@@ -5,6 +5,7 @@ public enum Language
 
     DIRECTORY_CREATED("Telefonkönyv könyvtár létrehozva."),
 
+    LOAD_SCREEN_ZERO_LOAD("Egy telefonkönyv se került betöltésre."),
     LOAD_SCREEN_TITLE("Telefonkönyv betöltése"),
     LOAD_SCREEN_LOAD_BUTTON("Betöltés"),
     LOAD_SCREEN_NEW_BUTTON("Új könyvtár"),

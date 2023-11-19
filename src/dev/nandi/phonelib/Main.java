@@ -7,9 +7,13 @@ import java.awt.*;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main
 {
+
+    static Logger logger = Logger.getLogger(Main.class.getName());
 
     private static LoadScreen loadScreen;
     public static File phonebooksDirectory;
@@ -26,7 +30,7 @@ public class Main
         phonebookManager = new PhonebookManager();
 
         if (!phonebookManager.loadPhonebooks())
-            loadScreen.showMessage("Egy telefonkönyv se került betöltésre.", Color.ORANGE);
+            loadScreen.showMessage(Language.LOAD_SCREEN_ZERO_LOAD.getMessage(), Color.ORANGE);
 
         loadScreen.setVisible(true);
     }
@@ -37,7 +41,7 @@ public class Main
 
         if (!phonebooksDirectory.exists() && phonebooksDirectory.mkdir())
         {
-            System.out.println(Language.DIRECTORY_CREATED.getMessage());
+            logger.log(Level.INFO, Language.DIRECTORY_CREATED.getMessage());
         }
     }
 

@@ -2,6 +2,7 @@ package dev.nandi.phonelib;
 
 
 import dev.nandi.phonelib.Phonebook.PhonebookManager;
+import dev.nandi.phonelib.Screens.LoadScreen;
 
 import java.awt.*;
 import java.io.File;
@@ -13,16 +14,16 @@ import java.util.logging.Logger;
 public class Main
 {
 
-    static Logger logger = Logger.getLogger(Main.class.getName());
+    public static final Logger logger = Logger.getLogger(Main.class.getName());
 
     private static LoadScreen loadScreen;
-    public static File phonebooksDirectory;
+    public static final File directory = getDirectory();
 
     private static PhonebookManager phonebookManager;
 
     public static void main(String[] args)
     {
-        initializePhonebooksDirectory();
+        phonebookManager = new PhonebookManager();
 
         loadScreen = new LoadScreen();
         loadScreen.loadDefaultScreen();
@@ -35,14 +36,16 @@ public class Main
         loadScreen.setVisible(true);
     }
 
-    private static void initializePhonebooksDirectory()
+    private static File getDirectory()
     {
-        phonebooksDirectory = new File("phonebooks");
+        File dir = new File("phonebooks");
 
-        if (!phonebooksDirectory.exists() && phonebooksDirectory.mkdir())
+        if (!dir.exists() && dir.mkdir())
         {
             logger.log(Level.INFO, Language.DIRECTORY_CREATED.getMessage());
         }
+
+        return dir;
     }
 
     public static void scheduleTask(Runnable code, long delayInSeconds)

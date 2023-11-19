@@ -1,4 +1,7 @@
-package dev.nandi.phonelib;
+package dev.nandi.phonelib.Screens;
+
+import dev.nandi.phonelib.Language;
+import dev.nandi.phonelib.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,10 +17,11 @@ public class LoadScreen extends JFrame
 
     public LoadScreen()
     {
-        setTitle(Language.LOAD_SCREEN_TITLE.getMessage());
-        setSize(400, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+        this.setTitle(Language.LOAD_SCREEN_TITLE.getMessage());
+        this.setSize(400, 200);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
 
         // Főpanel inicializálása GridBagLayout-tal
         JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -97,7 +101,7 @@ public class LoadScreen extends JFrame
         }
         else
         {
-            File file = new File(Main.phonebooksDirectory, fileName + ".txt");
+            File file = new File(Main.directory, fileName + ".txt");
 
             if (file.exists())
             {
@@ -132,7 +136,7 @@ public class LoadScreen extends JFrame
         }
         else
         {
-            File file = new File(Main.phonebooksDirectory, libName + ".txt");
+            File file = new File(Main.directory, libName + ".txt");
 
             if (file.exists())
             {

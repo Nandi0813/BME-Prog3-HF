@@ -17,6 +17,8 @@ public enum Language
     LOAD_SCREEN_CREATING_PHONEBOOK("A telefonkönyv létrehozása folyamatban %name% néven.."),
     LOAD_SCREEN_PHONEBOOK_NOT_EXISTS("A telefonkönyv nem létezik, használd az új könyvtár gombot."),
     LOAD_SCREEN_PHONEBOOK_LOADING("A telefonkönyv betöltése folyamatban.."),
+
+    MAIN_SCREEN_TITLE("%name% - Telefonkönyv"),
     ;
 
     private final String message;

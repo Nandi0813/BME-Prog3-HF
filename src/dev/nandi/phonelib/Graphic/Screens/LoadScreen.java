@@ -139,9 +139,7 @@ public class LoadScreen extends JFrame
         }
         else
         {
-            File file = new File(Main.directory, libName + ".txt");
-
-            if (file.exists())
+            if (Main.getPhonebookManager().getPhonebooks().containsKey(libName))
             {
                 showMessage("A telefonkönyv már létezik, használd a betöltés gombot.", Color.RED);
             }

@@ -36,7 +36,7 @@ public class PhonebookManager
                 loadPhonebook(file);
         }
 
-        return true;
+        return !phonebooks.isEmpty();
     }
 
     /**

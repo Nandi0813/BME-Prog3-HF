@@ -14,7 +14,8 @@ public class PhonebookTest
     private Contact contact;
 
     @Before
-    public void setUp() {
+    public void init()
+    {
         phonebook = new Phonebook("TestPhonebook");
         contact = new Person("John", "Doe", null, null, null);
     }

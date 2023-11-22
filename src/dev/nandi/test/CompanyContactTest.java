@@ -13,7 +13,7 @@ public class CompanyContactTest
     private Company company;
 
     @Before
-    public void setUp()
+    public void init()
     {
         Address address = new Address("Hungary", 1234, "Budapest", "Main Street", 1);
         Phone phone = new Phone(36, 123456789);

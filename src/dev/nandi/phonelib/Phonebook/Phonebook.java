@@ -50,7 +50,7 @@ public class Phonebook implements Serializable
     public void addContact(Contact contact)
     {
         this.contacts.add(contact);
-        Main.getMainScreen().getSearchBar().updatePlaceholder();
+        updateSearchbarPlaceholder();
     }
 
     /**
@@ -60,7 +60,13 @@ public class Phonebook implements Serializable
     public void removeContact(Contact contact)
     {
         this.contacts.remove(contact);
-        Main.getMainScreen().getSearchBar().updatePlaceholder();
+        updateSearchbarPlaceholder();
+    }
+
+    private static void updateSearchbarPlaceholder()
+    {
+        if (Main.getMainScreen() != null)
+            Main.getMainScreen().getSearchBar().updatePlaceholder();
     }
 
 }

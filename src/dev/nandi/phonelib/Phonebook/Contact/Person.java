@@ -1,7 +1,7 @@
 package dev.nandi.phonelib.Phonebook.Contact;
 
-import dev.nandi.phonelib.Phonebook.Contact.Attr.Address;
-import dev.nandi.phonelib.Phonebook.Contact.Attr.Phone;
+import dev.nandi.phonelib.Phonebook.Contact.Attributes.Address;
+import dev.nandi.phonelib.Phonebook.Contact.Attributes.Phone;
 
 import java.util.Date;
 

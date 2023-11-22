@@ -33,17 +33,16 @@ public class PhonebookManager
     {
         String absolutePath = file.getAbsolutePath();
 
-        try
+        try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Paths.get(absolutePath))))
         {
-            ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Paths.get(absolutePath)));
             Object readObject = ois.readObject();
             if (readObject instanceof Phonebook)
             {
                 Phonebook phonebook = (Phonebook) readObject;
                 this.phonebooks.put(phonebook.getName(), phonebook);
             }
-            ois.close();
-        } catch (StreamCorruptedException streamCorruptedException) {
+        }
+        catch (StreamCorruptedException streamCorruptedException) {
             Main.logger.log(Level.SEVERE, "A betölteni kivánt telefonkönyv fájlja sérült. File: " + absolutePath);
         } catch (Exception exception) {
             Main.logger.log(Level.SEVERE, "Hiba történt a fájl beolvasása közben. File: " + absolutePath);
@@ -52,23 +51,26 @@ public class PhonebookManager
 
     public void savePhonebook(final Phonebook phonebook)
     {
-        try
-        {
-            File file = new File(Main.directory, phonebook.getName() + ".txt");
+        File file = new File(Main.directory, phonebook.getName() + ".txt");
 
-            ObjectOutputStream outputStream = new ObjectOutputStream(Files.newOutputStream(Paths.get(file.getAbsolutePath())));
-            outputStream.writeObject(phonebook);
-            outputStream.close();
-        }
-        catch (IOException ex)
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(Files.newOutputStream(Paths.get(file.getAbsolutePath()))))
         {
+            outputStream.writeObject(phonebook);
+        }
+        catch (IOException ex) {
             Main.logger.log(Level.SEVERE, "Hiba történt a fájl mentése közben. Név: " + phonebook.getName());
         }
     }
 
-    public Map<String, Phonebook> getPhonebooks()
+    public void deletePhonebook(final Phonebook phonebook)
     {
-        return phonebooks;
+        this.phonebooks.remove(phonebook.getName(), phonebook);
+
+        File file = new File(Main.directory, phonebook.getName() + ".txt");
+        if (file.exists())
+            file.delete();
     }
+
+    public Map<String, Phonebook> getPhonebooks() { return phonebooks; }
 
 }

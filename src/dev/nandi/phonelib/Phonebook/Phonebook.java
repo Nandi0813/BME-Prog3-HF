@@ -1,17 +1,16 @@
 package dev.nandi.phonelib.Phonebook;
 
+import dev.nandi.phonelib.Main;
 import dev.nandi.phonelib.Phonebook.Contact.Contact;
 
-import javax.swing.table.AbstractTableModel;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class Phonebook extends AbstractTableModel implements Serializable
+public class Phonebook implements Serializable
 {
 
-    private static final long serialVersionUID = 2932842194912L;
+    private static final long serialVersionUID = 1L;
 
     private final String name;
 
@@ -28,66 +27,13 @@ public class Phonebook extends AbstractTableModel implements Serializable
     public void addContact(Contact contact)
     {
         this.contacts.add(contact);
-        this.fireTableDataChanged();
+        Main.getMainScreen().getSearchBar().updatePlaceholder();
     }
 
     public void removeContact(Contact contact)
     {
         this.contacts.remove(contact);
-        this.fireTableDataChanged();
-    }
-
-    @Override
-    public int getRowCount() { return this.contacts.size(); }
-
-    @Override
-    public int getColumnCount() { return 5; }
-
-    @Override
-    public String getColumnName(int column)
-    {
-        switch (column)
-        {
-            case 0:
-                return "Típus";
-            case 1:
-                return "Név";
-            case 2:
-                return "Cím";
-            case 3:
-                return "Telefonszám";
-            default:
-                return "Létrehozva";
-        }
-    }
-
-    @Override
-    public Class<?> getColumnClass(int columnIndex)
-    {
-        switch (columnIndex)
-        {
-            case 3:
-                return Integer.class;
-            case 4:
-                return Date.class;
-            default:
-                return String.class;
-        }
-    }
-
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex)
-    {
-        Contact contact = this.contacts.get(rowIndex);
-
-        switch (columnIndex)
-        {
-            case 0: return contact.getContactType().getName();
-            case 1: return contact.getName();
-            case 2: return contact.getAddress().toString();
-            case 3: return contact.getPhone().toString();
-            default: return contact.getAddedAt();
-        }
+        Main.getMainScreen().getSearchBar().updatePlaceholder();
     }
 
 }

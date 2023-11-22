@@ -1,7 +1,8 @@
-package dev.nandi.phonelib.Screens;
+package dev.nandi.phonelib.Graphic.Screens;
 
-import dev.nandi.phonelib.Language;
 import dev.nandi.phonelib.Main;
+import dev.nandi.phonelib.Phonebook.Phonebook;
+import dev.nandi.phonelib.Util;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,15 +10,29 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 
+/**
+ * A program betöltő képernyőjét reprezentáló osztály.
+ */
 public class LoadScreen extends JFrame
 {
 
-    private final JTextField libNameField;
+    /**
+     * A válasz üzenetet tartalmazó mező
+     */
     private final JLabel responseLabel;
 
+    /**
+     * Telefonkönyv nevét tartalmazó input mező
+     */
+    private final JTextField libNameField;
+    private final String loadScreenLabelString = "Írd ide a telefonkönyv nevét";
+
+    /**
+     * Konsturktor.
+     */
     public LoadScreen()
     {
-        this.setTitle(Language.LOAD_SCREEN_TITLE.getMessage());
+        this.setTitle("Telefonkönyv betöltése");
         this.setSize(400, 200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -38,7 +53,7 @@ public class LoadScreen extends JFrame
         mainPanel.add(responseLabel, gbc);
 
         // Fájlnév beviteli mező inicializálása
-        libNameField = new JTextField(Language.LOAD_SCREEN_LABEL.getMessage());
+        libNameField = new JTextField(loadScreenLabelString);
         libNameField.setPreferredSize(new Dimension(400, 40));
         libNameField.setHorizontalAlignment(SwingConstants.CENTER);
         inputPanel.add(libNameField);
@@ -49,7 +64,7 @@ public class LoadScreen extends JFrame
             @Override
             public void focusGained(FocusEvent e)
             {
-                if (libNameField.getText().equals(Language.LOAD_SCREEN_LABEL.getMessage()))
+                if (libNameField.getText().equals(loadScreenLabelString))
                 {
                     libNameField.setText("");
                 }
@@ -60,7 +75,7 @@ public class LoadScreen extends JFrame
             {
                 if (libNameField.getText().isEmpty())
                 {
-                    libNameField.setText(Language.LOAD_SCREEN_LABEL.getMessage());
+                    libNameField.setText(loadScreenLabelString);
                 }
             }
         });
@@ -69,12 +84,12 @@ public class LoadScreen extends JFrame
         JPanel buttonsPanel = new JPanel(new FlowLayout());
 
         // Betöltés gomb inicializálása
-        JButton loadButton = new JButton(Language.LOAD_SCREEN_LOAD_BUTTON.getMessage());
+        JButton loadButton = new JButton("Betöltés");
         loadButton.addActionListener(e -> loadDirectory());
         buttonsPanel.add(loadButton);
 
         // Új könyvtár létrehozása gomb inicializálása
-        JButton createButton = new JButton(Language.LOAD_SCREEN_NEW_BUTTON.getMessage());
+        JButton createButton = new JButton("Új könyvtár");
         createButton.addActionListener(e -> createNewDirectory());
         buttonsPanel.add(createButton);
 
@@ -93,27 +108,28 @@ public class LoadScreen extends JFrame
 
     private void loadDirectory()
     {
-        String fileName = libNameField.getText();
+        String phonebookName = libNameField.getText();
 
-        if (fileName.isEmpty() || fileName.equalsIgnoreCase(Language.LOAD_SCREEN_LABEL.getMessage()))
+        if (phonebookName.isEmpty() || phonebookName.equalsIgnoreCase(loadScreenLabelString))
         {
-            showMessage(Language.LOAD_SCREEN_EMPTY_INPUT.getMessage(), Color.RED);
+            showMessage("Adj meg egy telefonkönyv nevet!", Color.RED);
         }
         else
         {
-            File file = new File(Main.directory, fileName + ".txt");
-
-            if (file.exists())
+            if (Main.getPhonebookManager().getPhonebooks().containsKey(phonebookName))
             {
-                showMessage(Language.LOAD_SCREEN_PHONEBOOK_LOADING.getMessage(), Color.GREEN);
+                showMessage("A telefonkönyv betöltése folyamatban..", Color.GREEN);
 
-                Main.scheduleTask(() -> {
+                Util.scheduleTask(() ->
+                {
                     setVisible(false);
+
+                    Main.setMainScreen(Util.createMainScreen(Main.getPhonebookManager().getPhonebooks().get(phonebookName)));
                 }, 2);
             }
             else
             {
-                showMessage(Language.LOAD_SCREEN_PHONEBOOK_NOT_EXISTS.getMessage(), Color.RED);
+                showMessage("A telefonkönyv nem létezik, használd az új könyvtár gombot.", Color.RED);
             }
         }
     }
@@ -122,17 +138,17 @@ public class LoadScreen extends JFrame
     {
         String libName = libNameField.getText();
 
-        if (libName.isEmpty() || libName.equalsIgnoreCase(Language.LOAD_SCREEN_LABEL.getMessage()))
+        if (libName.isEmpty() || libName.equalsIgnoreCase(loadScreenLabelString))
         {
-            showMessage(Language.LOAD_SCREEN_EMPTY_INPUT.getMessage(), Color.RED);
+            showMessage("Adj meg egy telefonkönyv nevet!", Color.RED);
         }
         else if (libName.contains(" "))
         {
-            showMessage(Language.LOAD_SCREEN_NO_SPACE_CHAR.getMessage(), Color.RED);
+            showMessage("A telefonkönyv neve nem tartalmazhat szóközt!", Color.RED);
         }
         else if (libName.length() > 10)
         {
-            showMessage(Language.LOAD_SCREEN_MAX_CHAR.getMessage(), Color.RED);
+            showMessage("A telefonkönyv neve maximum 10 karakter lehet!", Color.RED);
         }
         else
         {
@@ -140,15 +156,19 @@ public class LoadScreen extends JFrame
 
             if (file.exists())
             {
-                showMessage(Language.LOAD_SCREEN_ALREADY_EXISTS.getMessage(), Color.RED);
+                showMessage("A telefonkönyv már létezik, használd a betöltés gombot.", Color.RED);
             }
             else
             {
-                showMessage(Language.LOAD_SCREEN_CREATING_PHONEBOOK.getMessage().replace("%name%", libName), Color.GREEN);
+                showMessage("A telefonkönyv létrehozása folyamatban " + libName + " néven..", Color.GREEN);
 
-                Main.scheduleTask(() ->
+                Util.scheduleTask(() ->
                 {
                     setVisible(false);
+
+                    Phonebook phonebook = new Phonebook(libName);
+                    Main.getPhonebookManager().getPhonebooks().put(libName, phonebook);
+                    Main.setMainScreen(Util.createMainScreen(phonebook));
                 }, 2);
             }
         }
@@ -157,7 +177,7 @@ public class LoadScreen extends JFrame
     public void loadDefaultScreen()
     {
         responseLabel.setText(" ");
-        libNameField.setText(Language.LOAD_SCREEN_LABEL.getMessage());
+        libNameField.setText(loadScreenLabelString);
     }
 
     public void showMessage(final String message, Color color)
@@ -166,6 +186,12 @@ public class LoadScreen extends JFrame
 
         if (color != null)
             responseLabel.setForeground(color);
+    }
+
+    public void showScreen()
+    {
+        this.setVisible(true);
+        this.requestFocus();
     }
 
 }

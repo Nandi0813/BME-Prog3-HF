@@ -33,3 +33,21 @@ i
 9src/dev/nandi/phonelib/Phonebook/Contact/ContactType.java,d/a/da29080776fff904a1f3dfd22d191cfbf8d6e758
 ^
 .src/dev/nandi/phonelib/Screens/MainScreen.java,5/a/5a9acc673525ff071654eed2bb8eea5e71da8378
+P
+ src/dev/nandi/phonelib/Util.java,4/c/4c75fff692eff15567c6f4802501fadce2592a52
+D
+phonebooks/teszt.txt,d/3/d30470d1bfbac089edbd00096cd355bc177de88b
+c
+3src/dev/nandi/phonelib/Phonebook/PhonebookData.java,e/6/e6b4a561659f6e22cc2278d57abdb8f855c13200
+f
+6src/dev/nandi/phonelib/Graphic/Screens/LoadScreen.java,a/c/ac6a62cb4ec303b168980269827fac6e413f1730
+f
+6src/dev/nandi/phonelib/Graphic/Screens/MainScreen.java,8/e/8edbd61becbb4c162e480a0fea7ccadde2a55a7c
+t
+Dsrc/dev/nandi/phonelib/Graphic/Panels/ContactTypeSelectionPanel.java,3/3/33f4a5fdf3b104e4a366b2b4da51aaf42e786fc3
+f
+6src/dev/nandi/phonelib/Graphic/Panels/PersonPanel.java,a/2/a28d46e3c1f08ff924687cddc2d68700bf70ab4e
+g
+7src/dev/nandi/phonelib/Graphic/Panels/CompanyPanel.java,3/b/3b0ceba66f68740f5a5873244fccff30ae086bc5
+g
+7src/dev/nandi/phonelib/Graphic/Panels/AddInterface.java,b/d/bdc67a8825f22ccaea42d399d9e05d1f6d00ded5

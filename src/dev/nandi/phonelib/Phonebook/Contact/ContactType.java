@@ -18,4 +18,12 @@ public enum ContactType
         return name;
     }
 
+    public static ContactType valueOfName(String name)
+    {
+        for (ContactType contactType : ContactType.values())
+            if (contactType.getName().equalsIgnoreCase(name))
+                return contactType;
+        return null;
+    }
+
 }

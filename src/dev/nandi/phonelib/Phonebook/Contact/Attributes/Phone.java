@@ -1,4 +1,4 @@
-package dev.nandi.phonelib.Phonebook.Contact.Attr;
+package dev.nandi.phonelib.Phonebook.Contact.Attributes;
 
 import java.io.Serializable;
 

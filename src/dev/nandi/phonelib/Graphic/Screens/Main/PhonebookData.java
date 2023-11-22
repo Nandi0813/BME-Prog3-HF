@@ -6,9 +6,7 @@ import dev.nandi.phonelib.Util;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import java.util.Date;
 import java.util.List;
 
 public class PhonebookData extends AbstractTableModel

@@ -5,11 +5,11 @@ import java.io.Serializable;
 public class Address implements Serializable
 {
 
-    private String country;
-    private int postalCode;
-    private String city;
-    private String street;
-    private int houseNumber;
+    private final String country;
+    private final int postalCode;
+    private final String city;
+    private final String street;
+    private final int houseNumber;
 
     public Address(String country, int postalCode, String city, String street, int houseNumber)
     {
@@ -25,12 +25,6 @@ public class Address implements Serializable
     public String getCity() { return city; }
     public String getStreet() { return street; }
     public int getHouseNumber() { return houseNumber; }
-
-    public void setCountry(String country) { this.country = country; }
-    public void setPostalCode(int postalCode) { this.postalCode = postalCode; }
-    public void setCity(String city) { this.city = city; }
-    public void setStreet(String street) { this.street = street; }
-    public void setHouseNumber(int houseNumber) { this.houseNumber = houseNumber; }
 
     @Override
     public String toString()

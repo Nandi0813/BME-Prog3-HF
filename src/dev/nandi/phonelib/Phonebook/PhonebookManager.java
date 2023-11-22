@@ -67,8 +67,8 @@ public class PhonebookManager
         this.phonebooks.remove(phonebook.getName(), phonebook);
 
         File file = new File(Main.directory, phonebook.getName() + ".txt");
-        if (file.exists())
-            file.delete();
+        if (file.exists() && file.delete())
+            Main.logger.log(Level.INFO, phonebook.getName() + " nevű telefonkönyv sikeresen törlődött.");
     }
 
     public Map<String, Phonebook> getPhonebooks() { return phonebooks; }

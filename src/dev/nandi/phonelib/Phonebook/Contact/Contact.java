@@ -12,7 +12,7 @@ public abstract class Contact implements Serializable
     protected final ContactType contactType;
     protected Address address;
     protected Phone phone;
-    protected Date addedAt;
+    protected final Date addedAt;
 
     protected Contact(ContactType contactType, Address address, Phone phone, Date addedAt)
     {
@@ -31,6 +31,5 @@ public abstract class Contact implements Serializable
 
     public void setAddress(Address address) { this.address = address; }
     public void setPhone(Phone phone) { this.phone = phone; }
-    public void setAddedAt(Date addedAt) { this.addedAt = addedAt; }
 
 }

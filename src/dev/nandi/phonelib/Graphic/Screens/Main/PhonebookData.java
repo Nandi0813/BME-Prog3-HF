@@ -12,23 +12,46 @@ import java.util.List;
 public class PhonebookData extends AbstractTableModel
 {
 
+    /**
+     * A telefonkönyv, amelynek adatait megjelenítjük.
+     */
     private final Phonebook phonebook;
+
+    /**
+     * A telefonkönyvben található kontaktok listája.
+     */
     private final List<Contact> contacts;
 
+    /**
+     * A telefonkönyv adatait megjelenítő táblázat modellje.
+     * @param phonebook A telefonkönyv, amelynek adatait megjelenítjük.
+     */
     public PhonebookData(Phonebook phonebook)
     {
         this.phonebook = phonebook;
         this.contacts = this.phonebook.getContacts();
     }
 
+    /**
+     * Getter a telefonkönyvhez.
+     */
     public Phonebook getPhonebook() { return this.phonebook; }
 
+    /**
+     * Telefonkönyvben található kontaktok számát adja vissza.
+     */
     @Override
     public int getRowCount() { return this.contacts.size(); }
 
+    /**
+     * @return Hány oszlopra van szükség a táblázatban.
+     */
     @Override
     public int getColumnCount() { return 5; }
 
+    /**
+     * @return A táblázat oszlopainak nevei.
+     */
     @Override
     public String getColumnName(int column)
     {
@@ -47,6 +70,9 @@ public class PhonebookData extends AbstractTableModel
         }
     }
 
+    /**
+     * @return A táblázat oszlopainak típusai.
+     */
     @Override
     public Class<?> getColumnClass(int columnIndex)
     {
@@ -59,6 +85,9 @@ public class PhonebookData extends AbstractTableModel
         }
     }
 
+    /**
+     * @return A táblázat oszlopainak szerkeszthetősége.
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {
@@ -74,6 +103,10 @@ public class PhonebookData extends AbstractTableModel
         }
     }
 
+    /**
+     * Keresés a táblázatban.
+     * @return Keresett elemeket tartalmazó lista.
+     */
     public RowSorter<PhonebookData> search(String searchFor)
     {
         RowFilter<PhonebookData, Integer> contactFilter = new RowFilter<PhonebookData, Integer>()

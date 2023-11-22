@@ -11,15 +11,21 @@ import java.util.Date;
 public class PersonPanel extends ContactInterface
 {
 
+    /**
+     * A személy vezetéknevét tartalmazó mező.
+     */
     private final JTextField lastNameField;
-    private final JTextField firstNameField;
-    private final JTextField countryField;
-    private final JTextField zipCodeField;
-    private final JTextField cityField;
-    private final JTextField streetField;
-    private final JTextField houseNumberField;
-    private final JTextField phoneNumberField;
 
+    /**
+     * A személy keresztnevét tartalmazó mező.
+     */
+    private final JTextField firstNameField;
+
+    /**
+     * @param phonebookData A telefonkönyv adatait tartalmazó objektum.
+     * @param person A személy, amit szerkesztünk. (Ha szerkesztünk és nem hozzáadunk)
+     * @param editable Igaz, ha szerkesztünk vagy létrehozunk, hamis, ha megjelenítünk.
+     */
     public PersonPanel(PhonebookData phonebookData, Person person, boolean editable)
     {
         super(phonebookData, person, editable);
@@ -60,6 +66,10 @@ public class PersonPanel extends ContactInterface
         this.inputPanel.add(phoneNumberField);
     }
 
+    /**
+     * Ellenőrzi, hogy a mezők tartalma megfelel-e a szabályoknak.
+     * @return A módosított személy objektum.
+     */
     @Override
     public Person validateContact()
     {

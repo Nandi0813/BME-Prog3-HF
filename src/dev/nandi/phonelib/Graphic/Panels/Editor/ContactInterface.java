@@ -12,15 +12,49 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+/**
+ * Ez az osztály felel az adat hozzáadás, megjelenítés és szerkesztésért.
+ * Leszármazik belőle a személy és a cég egyedi adatok megjelenítésért felésős osztályok.
+ */
 public abstract class ContactInterface extends JDialog
 {
 
+    /**
+     * Telefonkönyv adatait tartalmazó objektum.
+     */
     protected final PhonebookData phonebookData;
 
+    /**
+     * Közös objektumok.
+     */
+    protected JTextField countryField;
+    protected JTextField zipCodeField;
+    protected JTextField cityField;
+    protected JTextField streetField;
+    protected JTextField houseNumberField;
+    protected JTextField phoneNumberField;
+
+    /**
+     * JPanel ami tartalmazza a beviteli mezőket és a hozzájuk tartozó label-eket.
+     */
     protected final JPanel inputPanel = new JPanel(new GridLayout(8, 2));
+
+
+    /**
+     * Amennyiben egy névjegyet szerkeszt a felhasználó, ebben az objektumban van eltárolva, hogy melyik van éppen szerkesztés alatt.
+     */
     protected Contact editing;
+
+    /**
+     * Ha hamis akkor megjelenítji csak az adatokat a panel.
+     */
     protected final boolean editable;
 
+    /**
+     * @param phonebookData Telefonkönyv adatait tartalmazza a megjelenítéshez.
+     * @param editing A szerkesztés alatt lévő kontakt objektum.
+     * @param editable Szerkeszthető-e a form.
+     */
     protected ContactInterface(PhonebookData phonebookData, Contact editing, boolean editable)
     {
         this.phonebookData = phonebookData;
@@ -30,20 +64,27 @@ public abstract class ContactInterface extends JDialog
         this.init();
     }
 
+    /**
+     * Inicializálja a grafikus felületet.
+     */
     public void init()
     {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout()); // Tartalmazza a rész-paneleket.
+        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
 
+        JPanel buttonPanel = new JPanel(new FlowLayout()); // Gombokat tartalmazza.
+
+        // Jóváhagyás/okézés gomb.
         JButton okButton = new JButton(editing == null ? "Hozzáadás" : (editable ? "Módosítás" : "Bezárás"));
         okButton.addActionListener(e -> okButton());
         buttonPanel.add(okButton);
 
-        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
-        mainPanel.add(inputPanel);
+        // Hozzá adjuk az "al"-paneleket a fő panelhez, majd azt a dialógushoz.
+        mainPanel.add(this.inputPanel);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         this.getContentPane().add(mainPanel);
 
+        // Bezárás esetén szüntesse törölje a dialógust.
         this.addWindowListener(new WindowAdapter()
         {
             @Override
@@ -53,6 +94,10 @@ public abstract class ContactInterface extends JDialog
         });
     }
 
+    /**
+     * Megjeleníti a dialógust.
+     * Ha nem szerkeszthető a form, akkor a kikapcsolja a szerkeszthetőségét.
+     */
     public void showDialog()
     {
         if (!editable)
@@ -67,14 +112,29 @@ public abstract class ContactInterface extends JDialog
         this.setVisible(true);
     }
 
+    /**
+     * Ellenőrzi, hogy a dialógusban megadott adatok megfelelőek-e.
+     * @return A dialógusban megadott adatok alapján létrehozott kontakt objektum.
+     */
     public abstract Contact validateContact();
 
+    /**
+     * Hozzáad egy kontaktot a telefonkönyvhöz.
+     * @param phonebookData Telefonkönyv adatait tartalmazó objektum.
+     * @param contact A hozzáadandó kontakt objektum.
+     */
     public void addContact(PhonebookData phonebookData, Contact contact)
     {
         phonebookData.getPhonebook().addContact(contact);
         phonebookData.fireTableDataChanged();
     }
 
+    /**
+     * Módosít egy kontaktot a telefonkönyvben.
+     * @param phonebookData Telefonkönyv adatait tartalmazó objektum.
+     * @param oldC A módosítandó kontakt.
+     * @param newC Az új kontakt, aminek az adatait átírjuk a régi objektumba.
+     */
     public void editContact(PhonebookData phonebookData, Contact oldC, Contact newC)
     {
         oldC.setAddress(newC.getAddress());
@@ -94,6 +154,9 @@ public abstract class ContactInterface extends JDialog
         phonebookData.fireTableDataChanged();
     }
 
+    /**
+     * Lekezeli az oké/jóváhagyás gombot.
+     */
     private void okButton()
     {
         Contact contact = validateContact();
@@ -128,6 +191,11 @@ public abstract class ContactInterface extends JDialog
         }
     }
 
+    /**
+     * Megkeresi az összes JTextField-et a dialógusban.
+     * @param container A dialógus.
+     * @return Az összes JTextField.
+     */
     private static java.util.List<JTextField> findAllTextFields(Container container)
     {
         java.util.List<JTextField> textFields = new ArrayList<>();
@@ -135,6 +203,11 @@ public abstract class ContactInterface extends JDialog
         return textFields;
     }
 
+    /**
+     * Rekurzívan megkeresi az összes JTextField-et a dialógusban.
+     * @param container A dialógus.
+     * @param textFields Az összes JTextField.
+     */
     private static void findTextFields(Container container, java.util.List<JTextField> textFields)
     {
         Component[] components = container.getComponents();

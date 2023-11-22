@@ -9,15 +9,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * A telefonkönyvek kezelésére szolgáló osztály.
+ */
 public class PhonebookManager
 {
 
+    /**
+     * A telefonkönyvek tárolására szolgáló HashMap;.
+     */
     private final Map<String, Phonebook> phonebooks = new HashMap<>();
 
+    /**
+     * Betölti a telefonkönyveket a megadott mappából.
+     * @return false ha egyet se tudott betölteni, egyébként true.
+     */
     public boolean loadPhonebooks()
     {
         File[] files = Main.directory.listFiles();
-        if (files == null)
+        if (files == null || files.length == 0)
             return false;
 
         for (File file : files)
@@ -29,6 +39,10 @@ public class PhonebookManager
         return true;
     }
 
+    /**
+     * Betölti a megadott fájlból a telefonkönyvet.
+     * @param file a fájl amiből a telefonkönyvet be kell tölteni.
+     */
     public void loadPhonebook(final File file)
     {
         String absolutePath = file.getAbsolutePath();
@@ -49,6 +63,10 @@ public class PhonebookManager
         }
     }
 
+    /**
+     * Elmenti a megadott telefonkönyvet.
+     * @param phonebook a telefonkönyv amit el kell menteni.
+     */
     public void savePhonebook(final Phonebook phonebook)
     {
         File file = new File(Main.directory, phonebook.getName() + ".txt");
@@ -62,6 +80,10 @@ public class PhonebookManager
         }
     }
 
+    /**
+     * Töröl egy megadott telefonkönyvet.
+     * @param phonebook a telefonkönyv amit törölni kell.
+     */
     public void deletePhonebook(final Phonebook phonebook)
     {
         this.phonebooks.remove(phonebook.getName(), phonebook);
@@ -71,6 +93,9 @@ public class PhonebookManager
             Main.logger.log(Level.INFO, phonebook.getName() + " nevű telefonkönyv sikeresen törlődött.");
     }
 
+    /**
+     * @return a telefonkönyvek HashMap-je.
+     */
     public Map<String, Phonebook> getPhonebooks() { return phonebooks; }
 
 }

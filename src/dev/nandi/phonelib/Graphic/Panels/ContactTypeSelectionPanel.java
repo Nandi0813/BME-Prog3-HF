@@ -15,10 +15,20 @@ import java.awt.event.WindowEvent;
 public class ContactTypeSelectionPanel extends JDialog
 {
 
+    /**
+     * A telefonkönyv adatai
+     */
     private final PhonebookData phonebookData;
 
+    /**
+     * A kontakt típusokat tartalmazó legördülő lista
+     */
     private final JComboBox<String> contactTypeComboBox = new JComboBox<>();
 
+    /**
+     * Konstruktor
+     * @param mainScreen A főképernyő
+     */
     public ContactTypeSelectionPanel(MainScreen mainScreen)
     {
         super(mainScreen, "Válaszd ki a kontakt típusát", true);
@@ -28,6 +38,9 @@ public class ContactTypeSelectionPanel extends JDialog
         this.init();
     }
 
+    /**
+     * Inicializálja a dialógusablakot
+     */
     private void init()
     {
         this.setPreferredSize(new Dimension(300, 150));
@@ -64,11 +77,19 @@ public class ContactTypeSelectionPanel extends JDialog
         this.setVisible(true);
     }
 
+    /**
+     * Visszaadja a kiválasztott kontakt típust
+     * @return A kiválasztott kontakt típus
+     */
     public ContactType getSelectedContactType()
     {
         return ContactType.valueOfName((String) contactTypeComboBox.getSelectedItem());
     }
 
+    /**
+     * A dialógusablak "oké"-zésekor hívott metódus.
+     * Megnyitja a kiválasztott kontakt típus szerkesztőjét.
+     */
     private void okButton()
     {
         ContactInterface contactInterface = null;

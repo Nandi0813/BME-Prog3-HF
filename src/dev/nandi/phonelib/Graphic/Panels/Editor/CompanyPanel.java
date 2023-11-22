@@ -11,15 +11,21 @@ import java.util.Date;
 public class CompanyPanel extends ContactInterface
 {
 
+    /**
+     * A cég nevét tartalmazó mező.
+     */
     private final JTextField nameField;
-    private final JTextField countryField;
-    private final JTextField zipCodeField;
-    private final JTextField cityField;
-    private final JTextField streetField;
-    private final JTextField houseNumberField;
-    private final JTextField phoneNumberField;
+
+    /**
+     * A cég adószámát tartalmazó mező.
+     */
     private final JTextField taxNumberField;
 
+    /**
+     * @param phonebookData A telefonkönyv adatait tartalmazó objektum.
+     * @param company A cég, amit szerkesztünk. (Ha szerkesztünk és nem hozzáadunk)
+     * @param editable Igaz, ha szerkesztünk vagy létrehozunk, hamis, ha megjelenítünk.
+     */
     public CompanyPanel(PhonebookData phonebookData, Company company, boolean editable)
     {
         super(phonebookData, company, editable);
@@ -58,6 +64,10 @@ public class CompanyPanel extends ContactInterface
         this.inputPanel.add(taxNumberField);
     }
 
+    /**
+     * Ellenőrzi, hogy a mezők helyesen vannak-e kitöltve.
+     * @return A módosított cég objektum.
+     */
     @Override
     public Company validateContact()
     {

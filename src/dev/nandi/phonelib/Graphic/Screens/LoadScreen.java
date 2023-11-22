@@ -28,10 +28,11 @@ public class LoadScreen extends JFrame
     private final String loadScreenLabelString = "Írd ide a telefonkönyv nevét";
 
     /**
-     * Konsturktor.
+     * Konsturktor
      */
     public LoadScreen()
     {
+        // Frame beállításai
         this.setTitle("Telefonkönyv betöltése");
         this.setSize(400, 200);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,6 +41,7 @@ public class LoadScreen extends JFrame
 
         // Főpanel inicializálása GridBagLayout-tal
         JPanel mainPanel = new JPanel(new GridBagLayout());
+
         // Input panel inicializálása
         JPanel inputPanel = new JPanel(new FlowLayout());
 
@@ -56,29 +58,8 @@ public class LoadScreen extends JFrame
         libNameField = new JTextField(loadScreenLabelString);
         libNameField.setPreferredSize(new Dimension(400, 40));
         libNameField.setHorizontalAlignment(SwingConstants.CENTER);
+        libNameField.addFocusListener(new PlaceholderListener());
         inputPanel.add(libNameField);
-
-        // FocusListener hozzáadása, hogy eltűnjön a szöveg, amikor a felhasználó rákattint az input mezőre
-        libNameField.addFocusListener(new FocusListener()
-        {
-            @Override
-            public void focusGained(FocusEvent e)
-            {
-                if (libNameField.getText().equals(loadScreenLabelString))
-                {
-                    libNameField.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e)
-            {
-                if (libNameField.getText().isEmpty())
-                {
-                    libNameField.setText(loadScreenLabelString);
-                }
-            }
-        });
 
         // Gombokat tartalmazó panel inicializálása
         JPanel buttonsPanel = new JPanel(new FlowLayout());
@@ -106,6 +87,9 @@ public class LoadScreen extends JFrame
         pack();
     }
 
+    /**
+     * Betölti a megadott nevű telefonkönyvet.
+     */
     private void loadDirectory()
     {
         String phonebookName = libNameField.getText();
@@ -134,6 +118,9 @@ public class LoadScreen extends JFrame
         }
     }
 
+    /**
+     * Létrehoz egy új telefonkönyvet a megadott név alapján.
+     */
     private void createNewDirectory()
     {
         String libName = libNameField.getText();
@@ -174,12 +161,20 @@ public class LoadScreen extends JFrame
         }
     }
 
+    /**
+     * Betölti a program alap betöltő képernyőjét.
+     */
     public void loadDefaultScreen()
     {
         responseLabel.setText(" ");
         libNameField.setText(loadScreenLabelString);
     }
 
+    /**
+     * Beállítja a válasz üzenetet.
+     * @param message Az üzenet szövege
+     * @param color Az üzenet színe
+     */
     public void showMessage(final String message, Color color)
     {
         responseLabel.setText(message);
@@ -188,10 +183,30 @@ public class LoadScreen extends JFrame
             responseLabel.setForeground(color);
     }
 
+    /**
+     * Megjeleníti a képernyőt.
+     */
     public void showScreen()
     {
         this.setVisible(true);
         this.requestFocus();
+    }
+
+    private class PlaceholderListener implements FocusListener
+    {
+        @Override
+        public void focusGained(FocusEvent e)
+        {
+            if (libNameField.getText().equals(loadScreenLabelString))
+                libNameField.setText("");
+        }
+
+        @Override
+        public void focusLost(FocusEvent e)
+        {
+            if (libNameField.getText().isEmpty())
+                libNameField.setText(loadScreenLabelString);
+        }
     }
 
 }

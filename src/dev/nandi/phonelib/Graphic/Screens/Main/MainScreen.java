@@ -22,38 +22,57 @@ import java.awt.event.WindowEvent;
 public class MainScreen extends JFrame
 {
 
+    /**
+     * A telefonkönyv, amelynek adatait megjeleníti
+     */
+    private final Phonebook phonebook;
+
+    /**
+     * A telefonkönyv adatait tartalmazó objektum
+     */
     private final PhonebookData phonebookData;
+
+    /**
+     * A táblázat, amely a telefonkönyv adatait jeleníti meg
+     */
     private final JTable contactTable = new JTable();
+
+    /**
+     * A keresőmező
+     */
     private final SearchBar searchBar;
 
+    /**
+     * A főképernyő konstruktora
+     * @param phonebook A telefonkönyv, amelynek adatait megjeleníti
+     */
     public MainScreen(Phonebook phonebook)
     {
         super(phonebook.getName() + " - Telefonkönyv");
+        this.phonebook = phonebook;
         this.phonebookData = new PhonebookData(phonebook);
 
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+        // Alap dolgok beállítása a főképernyőhöz
         Dimension screenSize = new Dimension(1280, 720);
         this.setMinimumSize(screenSize);
         this.setPreferredSize(screenSize);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        // Táblázat alapbeállításai
         contactTable.setModel(phonebookData);
-
         contactTable.setAutoCreateRowSorter(true);
         contactTable.setIntercellSpacing(new Dimension(10, 2));
         contactTable.setRowHeight(20);
         contactTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        // Rendererek beállítása
+        // Rendererek beállítása az oszlopok címeire
         JTableHeader header = contactTable.getTableHeader();
         header.setFont(new Font(header.getFont().getName(), Font.BOLD, 15));
         DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
-
-        JScrollPane scrollPane = new JScrollPane(contactTable);
 
         /*
          * Navigációs panel
@@ -61,63 +80,32 @@ public class MainScreen extends JFrame
         JPanel navigationPanel = new JPanel();
         navigationPanel.setBorder(BorderFactory.createTitledBorder("Navigáció"));
         navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
-
-        // Mentés
-        JButton savePhonebook = new JButton("Telefonkönyv mentése");
-        savePhonebook.addActionListener(e -> savePhonebook(phonebook));
-        navigationPanel.add(savePhonebook);
-
-        // Mentés és bezárás
-        JButton backToSelector = new JButton("Mentés és vissza");
-        backToSelector.addActionListener(e -> backToSelector(phonebook));
-        navigationPanel.add(backToSelector);
-
-        // Telefonkönyv törlése
-        JButton deletePhonebook = new JButton("Telefonkönyv törlése");
-        deletePhonebook.addActionListener(e -> deletePhonebook(phonebook));
-        navigationPanel.add(deletePhonebook);
+        addButtonsToNavigationPanel(navigationPanel);
 
         /*
-         * Névjegy panel
+         * Névjegy kezelő panel
          */
         JPanel contactPanel = new JPanel();
         contactPanel.setBorder(BorderFactory.createTitledBorder("Kontaktok"));
         contactPanel.setLayout(new BorderLayout());
 
-        // komponenspanel a táblázat fölé
+        // Button panel a táblázat fölé
         JPanel contactNorthPanel = new JPanel();
         contactNorthPanel.setLayout(new BoxLayout(contactNorthPanel, BoxLayout.X_AXIS));
+        addButtonsToContactPanel(contactNorthPanel);
 
-        // Kontakt hozzáadása
-        JButton addContactButton = new JButton("Kontakt hozzáadása");
-        addContactButton.addActionListener(e -> new ContactTypeSelectionPanel(this));
-        contactNorthPanel.add(addContactButton);
-
-        // Kontant részletek
-        JButton showContactButton = new JButton("Kontakt részletei");
-        showContactButton.addActionListener(e -> showContact());
-        contactNorthPanel.add(showContactButton);
-
-        // Kontant szerkesztése
-        JButton editContactButton = new JButton("Kontakt szerkesztése");
-        editContactButton.addActionListener(e -> editContact());
-        contactNorthPanel.add(editContactButton);
-
-        // Kontakt törlése
-        JButton deleteContactButton = new JButton("Kontakt törlése");
-        deleteContactButton.addActionListener(e -> deleteContact());
-        contactNorthPanel.add(deleteContactButton);
-
+        // Keresőmező
         this.searchBar = new SearchBar(phonebook.getContacts());
         searchBar.getDocument().addDocumentListener(new SearchBarListener());
         contactNorthPanel.add(searchBar);
 
         contactPanel.add(contactNorthPanel, BorderLayout.NORTH);
-        contactPanel.add(scrollPane, BorderLayout.CENTER);
+        contactPanel.add(new JScrollPane(contactTable), BorderLayout.CENTER);
 
         this.add(navigationPanel, BorderLayout.NORTH);
         this.add(contactPanel);
 
+        // Ablak bezárásakor mentés
         this.addWindowListener(new WindowAdapter()
         {
             @Override
@@ -128,6 +116,59 @@ public class MainScreen extends JFrame
         });
     }
 
+    /**
+     * Gombok hozzáadása a navigációs panelhez
+     * @param jPanel A navigációs panel
+     */
+    private void addButtonsToNavigationPanel(JPanel jPanel)
+    {
+        // Mentés
+        JButton savePhonebook = new JButton("Telefonkönyv mentése");
+        savePhonebook.addActionListener(e -> savePhonebook(phonebook));
+        jPanel.add(savePhonebook);
+
+        // Mentés és bezárás
+        JButton backToSelector = new JButton("Mentés és vissza");
+        backToSelector.addActionListener(e -> backToSelector(phonebook));
+        jPanel.add(backToSelector);
+
+        // Telefonkönyv törlése
+        JButton deletePhonebook = new JButton("Telefonkönyv törlése");
+        deletePhonebook.addActionListener(e -> deletePhonebook(phonebook));
+        jPanel.add(deletePhonebook);
+    }
+
+    /**
+     * Gombok hozzáadása a névjegy kezelő panelhez
+     * @param jPanel A névjegy kezelő panel
+     */
+    private void addButtonsToContactPanel(JPanel jPanel)
+    {
+        // Kontakt hozzáadása
+        JButton addContactButton = new JButton("Kontakt hozzáadása");
+        addContactButton.addActionListener(e -> new ContactTypeSelectionPanel(this));
+        jPanel.add(addContactButton);
+
+        // Kontant részletek
+        JButton showContactButton = new JButton("Kontakt részletei");
+        showContactButton.addActionListener(e -> showContact());
+        jPanel.add(showContactButton);
+
+        // Kontant szerkesztése
+        JButton editContactButton = new JButton("Kontakt szerkesztése");
+        editContactButton.addActionListener(e -> editContact());
+        jPanel.add(editContactButton);
+
+        // Kontakt törlése
+        JButton deleteContactButton = new JButton("Kontakt törlése");
+        deleteContactButton.addActionListener(e -> deleteContact());
+        jPanel.add(deleteContactButton);
+    }
+
+    /**
+     * Telefonkönyv mentése gomb kezelése
+     * @param phonebook A telefonkönyv, amelyet menteni kell
+     */
     private static void savePhonebook(Phonebook phonebook)
     {
         Main.getPhonebookManager().savePhonebook(phonebook);
@@ -140,6 +181,10 @@ public class MainScreen extends JFrame
         );
     }
 
+    /**
+     * Vissza a telefonkönyv kiválasztó képernyőre gomb kezelése
+     * @param phonebook A telefonkönyv, amelyet menteni kell
+     */
     private static void backToSelector(Phonebook phonebook)
     {
         Main.getPhonebookManager().savePhonebook(phonebook);
@@ -148,6 +193,10 @@ public class MainScreen extends JFrame
         Main.getLoadScreen().setVisible(true);
     }
 
+    /**
+     * Telefonkönyv törlése gomb kezelése
+     * @param phonebook A telefonkönyv, amelyet törölni kell
+     */
     private static void deletePhonebook(Phonebook phonebook)
     {
         int result = JOptionPane.showConfirmDialog(
@@ -167,6 +216,9 @@ public class MainScreen extends JFrame
         }
     }
 
+    /**
+     * Kontakt megtekintése gomb kezelése
+     */
     private void showContact()
     {
         Contact contact = this.getSelectedContact();
@@ -188,6 +240,9 @@ public class MainScreen extends JFrame
         }
     }
 
+    /**
+     * Kontakt szerkesztése gomb kezelése
+     */
     private void editContact()
     {
         Contact contact = this.getSelectedContact();
@@ -209,6 +264,9 @@ public class MainScreen extends JFrame
         }
     }
 
+    /**
+     * Kontakt törlése gomb kezelése
+     */
     private void deleteContact()
     {
         Contact contact = this.getSelectedContact();
@@ -230,6 +288,9 @@ public class MainScreen extends JFrame
         }
     }
 
+    /**
+     * Keresőmező figyelője
+     */
     public class SearchBarListener implements DocumentListener
     {
         @Override
@@ -255,6 +316,10 @@ public class MainScreen extends JFrame
         }
     }
 
+    /**
+     * A kiválasztott kontakt lekérése a táblázatból
+     * @return A kiválasztott kontakt
+     */
     private Contact getSelectedContact()
     {
         int selectedRow = contactTable.convertRowIndexToModel(contactTable.getSelectedRow());
@@ -263,6 +328,9 @@ public class MainScreen extends JFrame
         return null;
     }
 
+    /**
+     * Getterek
+     */
     public PhonebookData getPhonebookData() { return phonebookData; }
     public SearchBar getSearchBar() { return searchBar; }
 
